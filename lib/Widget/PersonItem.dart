@@ -25,10 +25,8 @@ class PersonItemState extends State<PushIndex>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Listener(onPointerDown: (PointerDownEvent e){
-//      print("点击");
-//      methodChannel.invokeMethod("ToVideo",widget.personBean.roomId);
-    //FlutterBoost.singleton.openPage("KuGou://videoPage", {});
+    return GestureDetector(onTap: (){
+      FlutterBoost.singleton.openPage("KuGou://videoPage", {});
     },child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

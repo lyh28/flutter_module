@@ -22,34 +22,34 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  MethodChannel methodChannel;
-  String route;
+//  MethodChannel methodChannel;
+//  String route;
   // This widget is the root of your application.
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-//    FlutterBoost.singleton.registerPageBuilders({
-//      'KuGou://homePage': (pageName, params, _) => HomePage(),
-//      'KuGou://actionPage': (pageName, params, _) => ActionPage(),
-//      'KuGou://mePage': (pageName, params, _) => MePage(),
-//      'KuGou://songPage': (pageName, params, _) => SongPage(),
-//      'KuGou://videoPage': (pageName, params, _) => Mp4Video(),
-//    });
-//    FlutterBoost.handleOnStartPage();
-    route=ui.window.defaultRouteName;
-    methodChannel=MethodChannel("com.lyh/flutter");
-    methodChannel.setMethodCallHandler(handler);
+    FlutterBoost.singleton.registerPageBuilders({
+      'KuGou://homePage': (pageName, params, _) => HomePage(),
+      'KuGou://actionPage': (pageName, params, _) => ActionPage(),
+      'KuGou://mePage': (pageName, params, _) => MePage(),
+      'KuGou://songPage': (pageName, params, _) => SongPage(),
+      'KuGou://videoPage': (pageName, params, _) => Mp4Video(),
+    });
+    FlutterBoost.handleOnStartPage();
+//    route=ui.window.defaultRouteName;
+//    methodChannel=MethodChannel("com.lyh/flutter");
+//    methodChannel.setMethodCallHandler(handler);
   }
 
   Future<dynamic> handler(MethodCall call){
     print("方法被调用");
     switch(call.method){
       case "TabRoute":
-//          FlutterBoost.singleton.openPage("KuGou://homePage", {});
-      setState(() {
-        route=call.arguments;
-      });
+//          FlutterBoost.singleton.openPage(call.arguments, {});
+//      setState(() {
+//        route=call.arguments;
+//      });
         break;
     }
   }
@@ -57,11 +57,10 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     print("主页面");
     return MaterialApp(
-//      routes: {"home": (BuildContext)=> HomePage()},
       title: 'Flutter Demo',
-//      builder: FlutterBoost.init(),
-//      home: Container(),
-        home: _widgetForRoute(route)
+      builder: FlutterBoost.init(),
+      home: Container(),
+//        home: _widgetForRoute(route)
     );
   }
 
