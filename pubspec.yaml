@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_easyrefresh: ^1.2.7
-  video_player: ^0.10.1
+  flutter_ijkplayer: ^0.3.3
   flutter_boost: ^0.0.415
   cupertino_icons: ^0.1.2
 
