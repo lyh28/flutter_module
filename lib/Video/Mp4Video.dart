@@ -19,9 +19,10 @@ class Mp4VideoState extends State<Mp4Video> {
   static final steam4="rtmp://183.57.150.180:1935/live/fx_hifi_1520785452_sub?token=75bdeb56bd613b38dbf150a57863335c&us=1501304837&tp=1566179095000027&ti=30&kd=57&ua=fx-alone-android&cn=fx&cp=2763559799&lr=0&fx-ps=2-1501304837-1566179095037";
   static final steam5="rtmp://183.57.150.180:1935/live/fx_hifi_1481435640?token=a2ad4350a92788c52e3bf0a8199b33bd&us=1501304837&tp=1566183593000981&ti=30&kd=57&ua=fx-alone-android&cn=fx&cp=2763559799&lr=0&fx-ps=2-1501304837-1566183593987";
 
-  List strs=[steam1,steam4,steam2,steam3,steam5];
+  List strs=[steam1,steam2,steam3,steam4,steam5];
   Widget image;
   bool isPlay=false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,43 +32,15 @@ class Mp4VideoState extends State<Mp4Video> {
     //PageView设置
     initPageView();
   }
+
   //设置直播
   void initSteam() async{
     _ijkMediaController = IjkMediaController();
     _ijkMediaController.playingStream.listen(playingListener);
     await _ijkMediaController.setNetworkDataSource(strs[0],autoPlay: true);
+//    await _ijkMediaController.play();
   }
-
-  //是否播放的监听
-  void playingListener(bool data){
-    if(data==null)  return ;
-    print("是否播放中   $data");
-    if(data){
-      isPlay=true;
-      Timer(Duration(seconds: 1),callback);
-    }
-    else  {
-      isPlay = false;
-      setState(() {});
-    }
-
-  }
-  //播放后一秒的回调  一秒是用来避开闪黑屏
-  void callback() async{
-    //得到直播视频的宽高信息，用来得知是否全屏
-    VideoInfo info=await _ijkMediaController.getVideoInfo();
-    print("info:  $info");
-    if(info.width<info.height)  _ijkMediaController.isFullScreen=true;
-    else _ijkMediaController.isFullScreen=false;
-    setState(() {
-      print("刷新");
-    });
-  }
-  //videoinfo的监听
-  void videoinfoListener(VideoInfo info){
-    print("监听info:  $info");
-  }
-  //设置PageView
+//设置PageView
   void initPageView(){
     _pageController = PageController(initialPage: 1);
     _pageController.addListener(() {
@@ -77,7 +50,32 @@ class Mp4VideoState extends State<Mp4Video> {
       update();
     });
   }
-  //点击
+  //是否播放的监听
+  void playingListener(bool data){
+    if(data==null)  return ;
+    if(data){
+      isPlay=true;
+      //播放后一秒的回调  一秒是用来避开闪黑屏
+//      Timer(Duration(seconds: 1),callback);
+      callback();
+    }
+    else  {
+      isPlay = false;
+      setState(() {});
+    }
+  }
+  void callback() async{
+    //得到直播视频的宽高信息，用来得知是否全屏
+    VideoInfo info=await _ijkMediaController.getVideoInfo();
+    print("自己得到的info   $info");
+    if(info.width<info.height)  _ijkMediaController.isFullScreen=true;
+    else _ijkMediaController.isFullScreen=false;
+    setState(() {
+      print("刷新");
+    });
+  }
+
+  //切换页面时调用更新
   void update() async{
     int index=offset>0?offset:0-offset;
     index=offset%strs.length;
@@ -85,7 +83,6 @@ class Mp4VideoState extends State<Mp4Video> {
     await _ijkMediaController.setNetworkDataSource(strs[index]);
     await _ijkMediaController.play();
     _pageController.jumpToPage(1);
-
   }
   @override
   void dispose() {
@@ -94,26 +91,20 @@ class Mp4VideoState extends State<Mp4Video> {
     _ijkMediaController.dispose();
     _pageController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print("build");
     return Scaffold(
         body: PageView.builder(
       itemBuilder: (BuildContext context, int index) {
-        List<Widget> w=List();
-        w.add(IjkPlayer(
-            mediaController: _ijkMediaController,
-            controllerWidgetBuilder: (controller) {
-              return Container();
-            },
-            textureBuilder: (context,controller,info){
-              return DefaultIJKPlayerWrapper(controller: controller,info: info);
-            }
-        ));
-        if(index!=1||!isPlay){
-          return Center(child: Text("此处有占位图"),);
+        if(index!=1){
+          return Center(child: Text("此处有占位图"));
         }
+        List<Widget> w=List();
+        VideoInfo info=_ijkMediaController.videoInfo;
+        w.add(DefaultIJKPlayerWrapper(controller: _ijkMediaController,info: info,));
+//        w.add(IjkPlayer(mediaController: _ijkMediaController,))
         return Stack(
           fit: StackFit.expand,
           children: w

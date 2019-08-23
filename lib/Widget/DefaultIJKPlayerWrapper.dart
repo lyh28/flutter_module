@@ -13,7 +13,6 @@ class DefaultIJKPlayerWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     double ratio = info?.ratio ?? 1280 / 720;
     final size=MediaQuery.of(context).size;
-    print("宽高比：  $size   $ratio    ${info.ratio}   ${info.width}" );
     var id = controller.textureId;
     if (id == null) {
       return AspectRatio(
@@ -23,8 +22,8 @@ class DefaultIJKPlayerWrapper extends StatelessWidget {
         ),
       );
     }
-    double infoW=info.ratio*size.height;
-    Rect rect=Rect.fromLTWH(0-(infoW-size.width)/2, 0, infoW, size.height);
+//    double infoW=info.ratio*size.height;
+//    Rect rect=Rect.fromLTWH(0-(infoW-size.width)/2, 0, infoW, size.height);
     Widget w = Container(
       height: size.height,
       color: Colors.white,
