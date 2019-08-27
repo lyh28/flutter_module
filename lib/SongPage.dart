@@ -9,21 +9,10 @@ class SongPage extends StatefulWidget{
 }
 class SongPageState extends State<SongPage>{
   @override
-  void initState() {
-    // TODO: implement initState
-    EventChannel eventChannel=EventChannel("");
-    eventChannel.receiveBroadcastStream().listen((e){
-
-    });
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        body: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
-          Text("好歌声")
-        ])
+        body: Center(child: Text("好歌声"))
     );
   }
 }
