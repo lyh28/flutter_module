@@ -12,9 +12,7 @@ class MePageState extends State<MePage>{
     print("渲染页面");
     // TODO: implement build
     return Scaffold(
-        body: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
-          Text("我的")
-        ])
+        body: Center(child: Text("我的"))
     );
   }
 }

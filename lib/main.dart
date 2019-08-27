@@ -5,9 +5,7 @@ import 'MePage.dart';
 import 'SongPage.dart';
 import 'package:flutter_module/Video/Mp4Video.dart';
 import 'package:flutter_boost/flutter_boost.dart';
-import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
-
 void main() {
   print("启动flutter");
   runApp(MyApp());
@@ -22,64 +20,68 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  MethodChannel methodChannel;
-  String route;
-  // This widget is the root of your application.
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-//    FlutterBoost.singleton.registerPageBuilders({
-//      'KuGou://homePage': (pageName, params, _) => HomePage(),
-//      'KuGou://actionPage': (pageName, params, _) => ActionPage(),
-//      'KuGou://mePage': (pageName, params, _) => MePage(),
-//      'KuGou://songPage': (pageName, params, _) => SongPage(),
-//      'KuGou://videoPage': (pageName, params, _) => Mp4Video(),
-//    });
-//    FlutterBoost.handleOnStartPage();
-    route=ui.window.defaultRouteName;
-    methodChannel=MethodChannel("com.lyh/flutter");
-    methodChannel.setMethodCallHandler(handler);
+    FlutterBoost.singleton.registerPageBuilders({
+      'KuGou://MainPage': (pageName, params, _) => MainPage(),
+      'KuGou://videoPage': (pageName, params, _) => Mp4Video(),
+    });
+    FlutterBoost.handleOnStartPage();
+
   }
 
-  Future<dynamic> handler(MethodCall call){
-    print("方法被调用");
-    switch(call.method){
-      case "TabRoute":
-//          FlutterBoost.singleton.openPage("KuGou://homePage", {});
-      setState(() {
-        route=call.arguments;
-      });
-        break;
-    }
-  }
   @override
   Widget build(BuildContext context) {
     print("主页面");
     return MaterialApp(
-//      routes: {"home": (BuildContext)=> HomePage()},
       title: 'Flutter Demo',
-//      builder: FlutterBoost.init(),
-//      home: Container(),
-        home: _widgetForRoute(route)
+      builder: FlutterBoost.init(),
+      home: Container(),
     );
   }
+}
 
-  Widget _widgetForRoute(String routes) {
-    print("选择路由");
-    switch (routes) {
-      case 'HomePage':
-        return HomePage();
-      case 'ActionPage':
-        return ActionPage();
-      case 'MePage':
-        return MePage();
-      case 'SongPage':
-        return SongPage();
-      case 'VideoPage':
-        return Mp4Video();
-      default:
-        return Scaffold();
+class MainPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return MainPageState();
+  }
+}
+class MainPageState extends State<MainPage>{
+  MethodChannel _methodChannel;
+  Widget child;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    child=HomePage();
+    _methodChannel=MethodChannel("flutter.io/route");
+    _methodChannel.setMethodCallHandler(methodCallHandler);
+  }
+  Future<dynamic> methodCallHandler(MethodCall methodCall){
+    switch(methodCall.method){
+      case "ToSong":
+        print("调用方法");
+        child=SongPage();
+        break;
+      case "ToHome":
+        child=HomePage();
+        break;
+      case "ToMe":
+        child=MePage();
+        break;
+      case "ToAction":
+        child=ActionPage();
+        break;
     }
+    setState(() {});
+  }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return child;
   }
 }

@@ -8,27 +8,11 @@ class ActionPage extends StatefulWidget{
 }
 class ActionPageState extends State<ActionPage>{
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print("initState");
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-
-    print("dispose");
-  }
-  @override
   Widget build(BuildContext context) {
     print("渲染页面");
     // TODO: implement build
     return Scaffold(
-        body : Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
-          Text("动态")
-        ])
+        body: Center(child: Text("动态"))
     );
   }
 
